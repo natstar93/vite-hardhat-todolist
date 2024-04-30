@@ -27,32 +27,32 @@ const App = () => {
 
   const handleClick = useCallback(async () => {
     setConnectionError(null);
-      const { isConnected, walletAddress, error } = await connectToEthereum();
+    const { isConnected, walletAddress, error } = await connectToEthereum();
 
-      if(error) {
-        setConnectionError(error);
-        return;
-      }
+    if (error) {
+      setConnectionError(error);
+      return;
+    }
 
-      setIsConnected(isConnected);
-      walletAddress && setAccountNumber(walletAddress);
-      const contractAddress = '0x347EcE27D451BBe1E99Bc0916573900411AFc97C';
+    setIsConnected(isConnected);
+    walletAddress && setAccountNumber(walletAddress);
+    const contractAddress = '0x347EcE27D451BBe1E99Bc0916573900411AFc97C';
 
-      const provider = new InfuraProvider('sepolia');
+    const provider = new InfuraProvider('sepolia');
 
-      const contract = new ethers.Contract(contractAddress, erc20.abi, provider);
+    const contract = new ethers.Contract(contractAddress, erc20.abi, provider);
 
-      const taskCountData: Task[] = await contract.taskCount();
-      const taskCount: number = Number(taskCountData);
+    const taskCountData: Task[] = await contract.taskCount();
+    const taskCount: number = Number(taskCountData);
 
-      let taskList: Task[] = [];
+    let taskList: Task[] = [];
 
-      for (let i = 1; i < taskCount + 1; i++) {
-        const { id, content, completed } = await contract.tasks(i);
-        taskList = [...taskList, { id: Number(id), content, completed }];
-      }
+    for (let i = 1; i < taskCount + 1; i++) {
+      const { id, content, completed } = await contract.tasks(i);
+      taskList = [...taskList, { id: Number(id), content, completed }];
+    }
 
-      setTodoListData(taskList);
+    setTodoListData(taskList);
   }, [setIsConnected, setAccountNumber, setTodoListData]);
 
   return (

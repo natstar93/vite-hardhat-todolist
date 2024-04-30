@@ -1,29 +1,41 @@
-import { connectToEthereum } from './blockchainFunctions';
+import {
+  connectToEthereum,
+  WALLET_NOT_FOUND,
+  USER_REJECTED,
+  METHOD_ETHEREUM_REQUEST_ACCOUNTS,
+  NO_WINDOW_OBJECT,
+  UNKNOWN_ERROR,
+  WALLET_REQUEST_PENDING,
+} from './blockchainFunctions';
 
 describe('connectToEthereum', () => {
   const windowEthereum = window.ethereum;
+  const ethereumRequest = jest.fn();
+
+  afterEach(() => {
+    Object.defineProperty(window, 'ethereum', {
+      configurable: true,
+      enumerable: true,
+      value: windowEthereum,
+    });
+  });
 
   describe('on successful connection', () => {
-    beforeEach(() => {
+    beforeAll(() => {
       Object.defineProperty(window, 'ethereum', {
         configurable: true,
         enumerable: true,
         value: {
-          request: async () => 123,
+          request: ethereumRequest.mockReturnValueOnce([123]),
         },
-      });
-    });
-
-    afterEach(() => {
-      Object.defineProperty(window, 'ethereum', {
-        configurable: true,
-        enumerable: true,
-        value: windowEthereum,
       });
     });
 
     it('returns wallet address', async () => {
       const response = await connectToEthereum();
+      expect(ethereumRequest).toHaveBeenCalledWith({
+        method: METHOD_ETHEREUM_REQUEST_ACCOUNTS,
+      });
       expect(response).toEqual({
         error: null,
         isConnected: true,
@@ -32,29 +44,46 @@ describe('connectToEthereum', () => {
     });
   });
 
-  describe('on failed connection', () => {
-    beforeEach(() => {
+  describe('when user rejects the connection', () => {
+    beforeAll(() => {
       Object.defineProperty(window, 'ethereum', {
         configurable: true,
         enumerable: true,
         value: {
-          request: jest.fn().mockRejectedValue(new Error('User rejected the request'))
+          request: ethereumRequest.mockRejectedValue(
+            Object.assign(new Error('New error message'), { code: 4001 })
+          ),
         },
       });
     });
 
-    afterEach(() => {
+    it('returns USER_REJECTED error', async () => {
+      const response = await connectToEthereum();
+      expect(response).toEqual({
+        error: USER_REJECTED,
+        isConnected: false,
+        walletAddress: null,
+      });
+    });
+  });
+
+  describe('when a wallet request is already pending', () => {
+    beforeAll(() => {
       Object.defineProperty(window, 'ethereum', {
         configurable: true,
         enumerable: true,
-        value: windowEthereum,
+        value: {
+          request: ethereumRequest.mockRejectedValue(
+            Object.assign(new Error('New error message'), { code: -32002 })
+          ),
+        },
       });
     });
 
-    it('returns error', async () => {
+    it('returns WALLET_REQUEST_PENDING error', async () => {
       const response = await connectToEthereum();
       expect(response).toEqual({
-        error: 'User rejected the request',
+        error: WALLET_REQUEST_PENDING,
         isConnected: false,
         walletAddress: null,
       });
@@ -62,25 +91,59 @@ describe('connectToEthereum', () => {
   });
 
   describe('when ethereum window object does not exist', () => {
-    beforeEach(() => {
+    beforeAll(() => {
       Object.defineProperty(window, 'ethereum', {
         configurable: true,
         enumerable: true,
       });
     });
 
-    afterEach(() => {
-      Object.defineProperty(window, 'ethereum', {
-        configurable: true,
-        enumerable: true,
-        value: windowEthereum,
-      });
-    });
-
-    it('returns error', async () => {
+    it('returns NO_WINDOW_OBJECT error', async () => {
       const response = await connectToEthereum();
       expect(response).toEqual({
-        error: 'No ethereum window object',
+        error: NO_WINDOW_OBJECT,
+        isConnected: false,
+        walletAddress: null,
+      });
+    });
+  });
+
+  describe('when a wallet address is not returned', () => {
+    beforeAll(() => {
+      Object.defineProperty(window, 'ethereum', {
+        configurable: true,
+        enumerable: true,
+        value: {
+          request: ethereumRequest.mockReturnValueOnce([]),
+        },
+      });
+    });
+
+    it('returns WALLET_NOT_FOUND error', async () => {
+      const response = await connectToEthereum();
+      expect(response).toEqual({
+        error: WALLET_NOT_FOUND,
+        isConnected: false,
+        walletAddress: null,
+      });
+    });
+  });
+
+  describe('when ethereum throws an error with no staus code', () => {
+    beforeAll(() => {
+      Object.defineProperty(window, 'ethereum', {
+        configurable: true,
+        enumerable: true,
+        value: {
+          request: ethereumRequest.mockRejectedValue(new Error()),
+        },
+      });
+    });
+
+    it('returns UNKNOWN_ERROR error', async () => {
+      const response = await connectToEthereum();
+      expect(response).toEqual({
+        error: UNKNOWN_ERROR,
         isConnected: false,
         walletAddress: null,
       });
