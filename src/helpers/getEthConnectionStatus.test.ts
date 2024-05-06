@@ -1,14 +1,13 @@
-import {
-  connectToEthereum,
+import getEthConnectionStatus, {
   WALLET_NOT_FOUND,
   USER_REJECTED,
   METHOD_ETHEREUM_REQUEST_ACCOUNTS,
   NO_WINDOW_OBJECT,
   UNKNOWN_ERROR,
   WALLET_REQUEST_PENDING,
-} from './blockchainFunctions';
+} from './getEthConnectionStatus.ts';
 
-describe('connectToEthereum', () => {
+describe('getEthConnectionStatus', () => {
   const windowEthereum = window.ethereum;
   const ethereumRequest = jest.fn();
 
@@ -26,20 +25,20 @@ describe('connectToEthereum', () => {
         configurable: true,
         enumerable: true,
         value: {
-          request: ethereumRequest.mockReturnValueOnce([123]),
+          request: ethereumRequest.mockReturnValueOnce(['123']),
         },
       });
     });
 
     it('returns wallet address', async () => {
-      const response = await connectToEthereum();
+      const response = await getEthConnectionStatus();
       expect(ethereumRequest).toHaveBeenCalledWith({
         method: METHOD_ETHEREUM_REQUEST_ACCOUNTS,
       });
       expect(response).toEqual({
         error: null,
         isConnected: true,
-        walletAddress: 123,
+        walletAddress: '123',
       });
     });
   });
@@ -58,11 +57,11 @@ describe('connectToEthereum', () => {
     });
 
     it('returns USER_REJECTED error', async () => {
-      const response = await connectToEthereum();
+      const response = await getEthConnectionStatus();
       expect(response).toEqual({
         error: USER_REJECTED,
         isConnected: false,
-        walletAddress: null,
+        walletAddress: '',
       });
     });
   });
@@ -81,11 +80,11 @@ describe('connectToEthereum', () => {
     });
 
     it('returns WALLET_REQUEST_PENDING error', async () => {
-      const response = await connectToEthereum();
+      const response = await getEthConnectionStatus();
       expect(response).toEqual({
         error: WALLET_REQUEST_PENDING,
         isConnected: false,
-        walletAddress: null,
+        walletAddress: '',
       });
     });
   });
@@ -99,11 +98,11 @@ describe('connectToEthereum', () => {
     });
 
     it('returns NO_WINDOW_OBJECT error', async () => {
-      const response = await connectToEthereum();
+      const response = await getEthConnectionStatus();
       expect(response).toEqual({
         error: NO_WINDOW_OBJECT,
         isConnected: false,
-        walletAddress: null,
+        walletAddress: '',
       });
     });
   });
@@ -120,11 +119,11 @@ describe('connectToEthereum', () => {
     });
 
     it('returns WALLET_NOT_FOUND error', async () => {
-      const response = await connectToEthereum();
+      const response = await getEthConnectionStatus();
       expect(response).toEqual({
         error: WALLET_NOT_FOUND,
         isConnected: false,
-        walletAddress: null,
+        walletAddress: '',
       });
     });
   });
@@ -141,11 +140,11 @@ describe('connectToEthereum', () => {
     });
 
     it('returns UNKNOWN_ERROR error', async () => {
-      const response = await connectToEthereum();
+      const response = await getEthConnectionStatus();
       expect(response).toEqual({
         error: UNKNOWN_ERROR,
         isConnected: false,
-        walletAddress: null,
+        walletAddress: '',
       });
     });
   });

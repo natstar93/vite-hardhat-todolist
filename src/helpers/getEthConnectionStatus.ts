@@ -11,7 +11,7 @@ type EthError = Error & {
 
 export const ConnectionErrorResponse: (args: { message?: string; code?: string }) => {
   isConnected: boolean;
-  walletAddress: number | null;
+  walletAddress: string;
   error: string;
 } = (args) => {
   const { message, code } = args;
@@ -22,7 +22,7 @@ export const ConnectionErrorResponse: (args: { message?: string; code?: string }
 
   const defaultErrorFields = {
     isConnected: false,
-    walletAddress: null,
+    walletAddress: '',
     error: UNKNOWN_ERROR,
   };
 
@@ -41,9 +41,9 @@ export const ConnectionErrorResponse: (args: { message?: string; code?: string }
   return defaultErrorFields;
 };
 
-export const connectToEthereum: () => Promise<{
+const getEthConnectionStatus: () => Promise<{
   isConnected: boolean;
-  walletAddress: number | null;
+  walletAddress: string;
   error: string | null;
 }> = async () => {
   let walletAddress;
@@ -56,6 +56,7 @@ export const connectToEthereum: () => Promise<{
     [walletAddress] = await ethereum.request({
       method: METHOD_ETHEREUM_REQUEST_ACCOUNTS,
     });
+    
     if (walletAddress) return { isConnected: true, walletAddress, error: null };
 
     return ConnectionErrorResponse({ message: WALLET_NOT_FOUND});
@@ -64,3 +65,5 @@ export const connectToEthereum: () => Promise<{
     return ConnectionErrorResponse({ code });
   }
 };
+
+export default getEthConnectionStatus;

@@ -1,33 +1,19 @@
-import { useCallback, useState } from 'react';
-import { InfuraProvider, ethers } from 'ethers';
+import React, { useCallback, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 
-import { connectToEthereum } from '../../helpers/blockchainFunctions';
-import * as erc20 from '../../../artifacts/contracts/TodoList.sol/TodoList.json';
 import './App.css';
-
-type Task = {
-  id: number;
-  content: string;
-  completed: boolean;
-};
-
-const TaskList = ({ tasks }: { tasks: Task[] }) => {
-  return tasks.map(({ id, content, completed }) => (
-    <div
-      key={`task-${id}`}
-    >{`${id} - ${content} - completed: ${completed}`}</div>
-  ));
-};
+import TodoList from '../TodoList/TodoList.tsx';
+import getEthConnectionStatus from '../../helpers/getEthConnectionStatus.ts';
 
 const App = () => {
-  const [todoListData, setTodoListData] = useState<Task[]>([]);
   const [isConnected, setIsConnected] = useState<boolean>(false);
-  const [accountNumber, setAccountNumber] = useState<number | null>(null);
+  const [accountNumber, setAccountNumber] = useState<string>('');
   const [connectionError, setConnectionError] = useState<string | null>(null);
+  const [newTodoText, setNewTodoText] = useState<string>('');
 
   const handleClick = useCallback(async () => {
     setConnectionError(null);
-    const { isConnected, walletAddress, error } = await connectToEthereum();
+    const { isConnected, walletAddress, error } = await getEthConnectionStatus();
 
     if (error) {
       setConnectionError(error);
@@ -36,45 +22,63 @@ const App = () => {
 
     setIsConnected(isConnected);
     walletAddress && setAccountNumber(walletAddress);
-    const contractAddress = '0x347EcE27D451BBe1E99Bc0916573900411AFc97C';
+ }, [setIsConnected, setAccountNumber]);
 
-    const provider = new InfuraProvider('sepolia');
 
-    const contract = new ethers.Contract(contractAddress, erc20.abi, provider);
+  const { isPending, error, data, isFetching } = useQuery({
+    queryFn: () => fetch('/api/wallet').then((res) => res.json()),
+    queryKey: ['accountNumber']
+  });
 
-    const taskCountData: Task[] = await contract.taskCount();
-    const taskCount: number = Number(taskCountData);
+  console.log({ isPending, error, data, isFetching });
 
-    let taskList: Task[] = [];
-
-    for (let i = 1; i < taskCount + 1; i++) {
-      const { id, content, completed } = await contract.tasks(i);
-      taskList = [...taskList, { id: Number(id), content, completed }];
-    }
-
-    setTodoListData(taskList);
-  }, [setIsConnected, setAccountNumber, setTodoListData]);
+  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    // send to blockchain
+    // contract?.createTask(newTodoText);
+    console.log({ newTodoText });
+    setNewTodoText('');
+  };
 
   return (
-    <div>
-      <h1>Blockchain Todo List</h1>
-      <div>
-        {accountNumber
-          ? `${accountNumber} is connected`
-          : 'Press button to connect'}
-      </div>
-      <button onClick={handleClick} disabled={isConnected}>
-        Connect
-      </button>
-      {connectionError && <div>{connectionError}</div>}
-      <div className='todoListContainer'>
-        {todoListData.length ? (
-          <TaskList tasks={todoListData} />
-        ) : (
-          'Nothing to do today'
-        )}
-      </div>
-    </div>
+    <main id='todo-list-app'>
+      <header>
+        <h1>Blockchain Todo List</h1>
+        <p>
+          Just what the world needed. Another todo list. This one is on the
+          Ethereum blockchain for no apparent reason.
+        </p>
+      </header>
+
+      <aside id='connectionDetails'>
+        <p>
+          {accountNumber
+            ? `${accountNumber} is connected`
+            : 'Press button to connect'}
+        </p>
+        <button onClick={handleClick} disabled={isConnected}>
+          Connect
+        </button>
+        <p>{connectionError}</p>
+      </aside>
+      <section id='todoList'>
+        <form onSubmit={onSubmit}>
+          <div>
+            <input
+              id='newTodoField'
+              type='text'
+              name='newTodoField'
+              value={newTodoText}
+              onChange={(e) => setNewTodoText(e.target.value)}
+            />
+          </div>
+          <div>
+            <input type='submit' value='Add todo' />
+          </div>
+        </form>
+        { data?.taskList && <TodoList tasks={data.taskList} />}
+      </section>
+    </main>
   );
 };
 

@@ -5,6 +5,18 @@
   text-align: center;
 }
 
+li {
+  list-style-type: none;
+}
+
+ul {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+section#todoList {
+  border: 2px solid rgb(118 93 120);
+}
+
 .logo {
   height: 6em;
   padding: 1.5em;
@@ -39,9 +51,4 @@
 
 .read-the-docs {
   color: #888;
-}
-
-.todoListContainer {
-  background-color: #888;
-  color: #242424;
 }
