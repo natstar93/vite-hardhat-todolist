@@ -1,18 +1,20 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Contract } from 'ethers';
 
-import erc20 from '../../../artifacts/contracts/TodoList.sol/TodoList.json';
+import {abi} from '../../../artifacts/contracts/TodoList.sol/TodoList.json';
 import addresses from '../../../ignition/deployments/chain-11155111/deployed_addresses.json';
+import ConnectionContext from '../../contexts/ConnectionContext.ts';
 
 const AddTodoForm = () => {
   const [newTodoText, setNewTodoText] = useState<string>('');
+  const { connectionStatus } = useContext(ConnectionContext);
+  const { signer } = connectionStatus;
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const contractAddress = addresses['TodoListModule#TodoList'];
-    const contract = new Contract(contractAddress, erc20.abi, signer);
-
-    console.log({ contract });
+    const contract = new Contract(contractAddress, abi, signer);
+    
     contract.createTask(newTodoText);
     setNewTodoText('');
   };
