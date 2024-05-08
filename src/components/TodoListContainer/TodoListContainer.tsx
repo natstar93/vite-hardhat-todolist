@@ -5,7 +5,7 @@ import AddTodoForm from '../AddTodoForm/AddTodoForm.tsx';
 import ConnectionContext from '../../contexts/ConnectionContext.ts';
 
 const TodoListContainer = () => {
-  const { isConnected } = useContext(ConnectionContext);
+  const { connectionStatus } = useContext(ConnectionContext);
 
   const { isPending, error, data, isFetching } = useQuery({
     queryFn: () => fetch('/api/wallet').then((res) => res.json()),
@@ -16,7 +16,7 @@ const TodoListContainer = () => {
   return (
     <section id='todoList'>
       <AddTodoForm />
-      {isConnected && data?.taskList && <TodoList tasks={data.taskList} />}
+      {connectionStatus?.isConnected && data?.taskList && <TodoList tasks={data.taskList} />}
     </section>
   );
 };

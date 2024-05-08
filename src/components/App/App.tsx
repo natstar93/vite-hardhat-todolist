@@ -1,34 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import ConnectionContext, {
-  ConnectionContextType,
-  connectionContextDefaultValues,
+  ConnectionStatusType,
+  connectionStatusDefaultValues,
 } from '../../contexts/ConnectionContext.ts';
 import ConnectionPanel from '../ConnectionPanel/ConnectionPanel.tsx';
 import './App.css';
-import getEthConnectionStatus from '../../helpers/getEthConnectionStatus.ts';
 import TodoListContainer from '../TodoListContainer/TodoListContainer.tsx';
 import Header from '../Header/Header.tsx';
 
 const App = () => {
   const [connectionStatus, setConnectionStatus] =
-    useState<ConnectionContextType>(connectionContextDefaultValues);
-
-  useEffect(() => {
-    async function getConnectionStatus() {
-      const connectionStatus = await getEthConnectionStatus();
-      setConnectionStatus(connectionStatus);
-    }
-
-    getConnectionStatus();
-  }, []);
-
-  console.log(connectionStatus);
+    useState<ConnectionStatusType>(connectionStatusDefaultValues);
 
   return (
     <main id='todo-list-app'>
       <Header />
-      <ConnectionContext.Provider value={connectionStatus}>
+      <ConnectionContext.Provider value={{connectionStatus, setConnectionStatus}}>
         <ConnectionPanel />
         <TodoListContainer />
       </ConnectionContext.Provider>

@@ -1,19 +1,29 @@
 import { JsonRpcSigner } from 'ethers';
-import { createContext } from 'react';
+import { Dispatch, createContext } from 'react';
 
-export type ConnectionContextType = {
-  walletAddress: string,
-  isConnected: boolean,
-  signer?: JsonRpcSigner,
+export type ConnectionStatusType = {
+  walletAddress: string;
+  isConnected: boolean;
+  signer?: JsonRpcSigner;
   error: string | null;
-}
+};
+export type ConnectionContextType = {
+  connectionStatus: ConnectionStatusType;
+  setConnectionStatus?: Dispatch<React.SetStateAction<ConnectionStatusType>>;
+};
 
-export const connectionContextDefaultValues = {
+export const connectionStatusDefaultValues = {
   walletAddress: '',
   isConnected: false,
   error: null,
-}
+};
 
-const ConnectionContext = createContext<ConnectionContextType>(connectionContextDefaultValues);
+export const connectionContextDefaultValues = {
+  connectionStatus: connectionStatusDefaultValues,
+};
+
+const ConnectionContext = createContext<ConnectionContextType>(
+  connectionContextDefaultValues
+);
 
 export default ConnectionContext;

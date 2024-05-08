@@ -1,13 +1,21 @@
 import React, { useContext } from 'react';
-import ConnectionContext from '../../contexts/ConnectionContext.ts';
 
-const handleClick = () => {
-  console.log('connect')
-}
+import ConnectionContext from '../../contexts/ConnectionContext.ts';
+import getEthConnectionStatus from '../../helpers/getEthConnectionStatus.ts';
 
 const ConnectionPanel = () => {
-  const { walletAddress, isConnected, error } = useContext(ConnectionContext);
+  const { setConnectionStatus, connectionStatus } = useContext(ConnectionContext);
+  const { walletAddress, isConnected, error } = connectionStatus;
   
+  const handleClick = () => {
+    async function getConnectionStatus() {
+      const connectionStatus = await getEthConnectionStatus();
+      setConnectionStatus && setConnectionStatus(connectionStatus);
+    }
+
+    getConnectionStatus();
+  };
+
   return (
     <aside id='connectionDetails'>
       <p>
