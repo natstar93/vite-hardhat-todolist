@@ -1,3 +1,5 @@
+import { ethers, BrowserProvider, JsonRpcSigner } from 'ethers';
+
 export const WALLET_NOT_FOUND = 'Oops, we couldn\t find your wallet address. Please try again later.';
 export const NO_WINDOW_OBJECT = 'Your account could not be loaded. Please check the MetaMask browser extension is installed correctly.';
 export const USER_REJECTED = 'The MetaMask connection was rejected. Please try connecting again and make sure you accept the connection to MetaMask.';
@@ -45,6 +47,7 @@ const getEthConnectionStatus: () => Promise<{
   isConnected: boolean;
   walletAddress: string;
   error: string | null;
+  signer?: JsonRpcSigner;
 }> = async () => {
   let walletAddress;
   const { ethereum } = window;
@@ -56,8 +59,13 @@ const getEthConnectionStatus: () => Promise<{
     [walletAddress] = await ethereum.request({
       method: METHOD_ETHEREUM_REQUEST_ACCOUNTS,
     });
+    const provider: BrowserProvider = new ethers.BrowserProvider(ethereum);
+    const network = await provider.getNetwork();
+    const signer = await provider.getSigner();
+    const address = await signer.getAddress();
+      console.log({ provider, network, signer, address })
     
-    if (walletAddress) return { isConnected: true, walletAddress, error: null };
+    if (walletAddress) return { isConnected: true, walletAddress, signer, error: null };
 
     return ConnectionErrorResponse({ message: WALLET_NOT_FOUND});
   } catch (err) {
