@@ -1,4 +1,4 @@
-import { JsonRpcSigner } from 'ethers';
+import { Contract, JsonRpcSigner } from 'ethers';
 import { Dispatch, createContext } from 'react';
 
 export type ConnectionStatusType = {
@@ -6,7 +6,9 @@ export type ConnectionStatusType = {
   isConnected: boolean;
   signer?: JsonRpcSigner;
   error: string | null;
+  contract?: Contract;
 };
+
 export type ConnectionContextType = {
   connectionStatus: ConnectionStatusType;
   setConnectionStatus?: Dispatch<React.SetStateAction<ConnectionStatusType>>;

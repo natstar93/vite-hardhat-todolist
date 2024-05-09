@@ -1,21 +1,37 @@
 import React, { useContext, useState } from 'react';
-import { Contract } from 'ethers';
+import { ContractTransactionResponse } from 'ethers';
 
-import {abi} from '../../../artifacts/contracts/TodoList.sol/TodoList.json';
-import addresses from '../../../ignition/deployments/chain-11155111/deployed_addresses.json';
 import ConnectionContext from '../../contexts/ConnectionContext.ts';
+import {
+  ConnectionErrorResponse,
+  EthError,
+} from '../../helpers/getEthConnectionStatus.ts';
 
-const AddTodoForm = () => {
+const AddTodoForm = ({
+  setLastTransationHash,
+}: {
+  setLastTransationHash: React.Dispatch<React.SetStateAction<string>>;
+}) => {
   const [newTodoText, setNewTodoText] = useState<string>('');
-  const { connectionStatus } = useContext(ConnectionContext);
-  const { signer } = connectionStatus;
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
-  const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const { connectionStatus } = useContext(ConnectionContext);
+  const { contract } = connectionStatus;
+
+  const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const contractAddress = addresses['TodoListModule#TodoList'];
-    const contract = new Contract(contractAddress, abi, signer);
-    
-    contract.createTask(newTodoText);
+    setErrorMessage('');
+
+    try {
+      const contractResponse: ContractTransactionResponse =
+        await contract?.createTask(newTodoText);
+      setLastTransationHash(contractResponse.hash);
+    } catch (err) {
+      const { code } = err as EthError;
+      const { error } = ConnectionErrorResponse({ code });
+      setErrorMessage(error);
+    }
+
     setNewTodoText('');
   };
 
@@ -33,6 +49,7 @@ const AddTodoForm = () => {
       <div>
         <input type='submit' value='Add todo' />
       </div>
+      <p>{errorMessage}</p>
     </form>
   );
 };

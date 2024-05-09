@@ -6,10 +6,10 @@ export type Task = {
   completed: boolean;
 };
 
-const TodoList = ({ tasks }: { tasks: Task[] }) => (
+const TodoList = ({ todos }: { todos: Task[] }) => (
   <ul className='todoListContainer'>
-    {tasks.length
-      ? tasks.map(({ id, content, completed }) => (
+    {todos.length
+      ? todos.map(({ id, content, completed }) => (
           <li
             key={`task-${id}`}
           >{`${id} - ${content} - completed: ${completed}`}</li>

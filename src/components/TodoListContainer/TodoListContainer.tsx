@@ -1,30 +1,22 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Contract } from 'ethers';
 
-import { abi } from '../../../artifacts/contracts/TodoList.sol/TodoList.json';
-import addresses from '../../../ignition/deployments/chain-11155111/deployed_addresses.json';
+import ConnectionContext from '../../contexts/ConnectionContext.ts';
 import TodoList, { Task } from '../TodoList/TodoList.tsx';
 import AddTodoForm from '../AddTodoForm/AddTodoForm.tsx';
-import ConnectionContext from '../../contexts/ConnectionContext.ts';
 
 const TodoListContainer = () => {
-  const CONTRACT_ADDRESS = addresses['TodoListModule#TodoList'];
+  const [lastTransationHash, setLastTransationHash] = useState<string>('');
   const { connectionStatus } = useContext(ConnectionContext);
-  const { signer, isConnected } = connectionStatus;
+  const { isConnected, contract, walletAddress } = connectionStatus;
 
   const [taskList, setTaskList] = useState<Task[]>([]);
 
-  const contract = useMemo(() => {
-    return new Contract(CONTRACT_ADDRESS, abi, signer);
-  }, [CONTRACT_ADDRESS, signer]);
-
   useEffect(() => {
-    async function getTaskData() {
-      const taskCountData: Task[] = await contract.taskCount();
-
-      const taskCount: number = Number(taskCountData);
-
+    async function getTodos(contract: Contract) {
       let taskList: Task[] = [];
+      const taskCountData: Task[] = await contract.taskCount();
+      const taskCount: number = Number(taskCountData);
 
       for (let i = 1; i < taskCount + 1; i++) {
         const { id, content, completed } = await contract.tasks(i);
@@ -32,14 +24,13 @@ const TodoListContainer = () => {
       }
       setTaskList(taskList);
     }
-
-    getTaskData();
-  }, [contract]);
+    contract && getTodos(contract);
+  }, [contract, walletAddress, lastTransationHash]);
 
   return (
     <section id='todoList'>
-      <AddTodoForm />
-      {isConnected && taskList && <TodoList tasks={taskList} />}
+      <AddTodoForm setLastTransationHash={setLastTransationHash} />
+      {isConnected && <TodoList todos={taskList} />}
     </section>
   );
 };
