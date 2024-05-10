@@ -2,10 +2,7 @@ import React, { useContext, useState } from 'react';
 import { ContractTransactionResponse } from 'ethers';
 
 import ConnectionContext from '../../contexts/ConnectionContext.ts';
-import {
-  ConnectionErrorResponse,
-  EthError,
-} from '../../helpers/getEthConnectionStatus.ts';
+import { handleErrors } from '../../helpers/handleErrors.ts';
 
 const AddTodoForm = ({
   setLastTransationHash,
@@ -27,9 +24,8 @@ const AddTodoForm = ({
         await contract?.createTask(newTodoText);
       setLastTransationHash(contractResponse.hash);
     } catch (err) {
-      const { code } = err as EthError;
-      const { error } = ConnectionErrorResponse({ code });
-      setErrorMessage(error);
+      const displayError = handleErrors(err);
+      setErrorMessage(displayError);
     }
 
     setNewTodoText('');

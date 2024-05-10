@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 
 import ConnectionContext from '../../contexts/ConnectionContext.ts';
-import getEthConnectionStatus from '../../helpers/getEthConnectionStatus.ts';
+import getEthConnectionDetails from '../../helpers/getEthConnectionDetails.ts';
 
 const ConnectionPanel = () => {
   const { setConnectionStatus, connectionStatus } = useContext(ConnectionContext);
@@ -9,7 +9,7 @@ const ConnectionPanel = () => {
   
   const handleClick = () => {
     async function getConnectionStatus() {
-      const connectionStatus = await getEthConnectionStatus();
+      const connectionStatus = await getEthConnectionDetails();
       setConnectionStatus && setConnectionStatus(connectionStatus);
     }
 
