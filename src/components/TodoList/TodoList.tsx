@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 
 export type Task = {
   id: number;
@@ -6,7 +6,7 @@ export type Task = {
   completed: boolean;
 };
 
-const TodoList = ({ todos }: { todos: Task[] }) => (
+const TodoList = memo(({ todos }: { todos: Task[] }) => (
   <ul className='todoListContainer'>
     {todos.length
       ? todos.map(({ id, content, completed }) => (
@@ -16,6 +16,6 @@ const TodoList = ({ todos }: { todos: Task[] }) => (
         ))
       : 'Nothing to do today'}
   </ul>
-);
+));
 
 export default TodoList;
