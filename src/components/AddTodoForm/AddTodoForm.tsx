@@ -3,7 +3,8 @@ import { ContractTransactionResponse } from 'ethers';
 
 import './AddTodoForm.css';
 import ConnectionContext from '../../contexts/ConnectionContext.ts';
-import { handleErrors } from '../../helpers/handleErrors.ts';
+import { formatErrorMessage } from '../../helpers/formatErrorMessage.ts';
+import { useContractContext } from '../../contexts/ContractContext.ts';
 
 const AddTodoForm = ({
   setLastTransationHash,
@@ -14,7 +15,10 @@ const AddTodoForm = ({
   const [errorMessage, setErrorMessage] = useState<string>('');
 
   const { connectionStatus } = useContext(ConnectionContext);
-  const { contract, isConnected } = connectionStatus;
+  const { contractStatus } = useContractContext();
+
+  const { contract } = contractStatus;
+  const { isConnected } = connectionStatus;
 
   useEffect(() => {
     setErrorMessage('');
@@ -29,7 +33,7 @@ const AddTodoForm = ({
         await contract?.createTask(newTodoText);
       setLastTransationHash(contractResponse.hash);
     } catch (err) {
-      const displayError = handleErrors(err);
+      const displayError = formatErrorMessage(err);
       setErrorMessage(displayError);
     }
 

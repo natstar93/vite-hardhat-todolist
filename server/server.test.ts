@@ -9,7 +9,7 @@ jest.mock('vite-express', () => ({
 jest.mock('./app.ts', jest.fn);
 
 describe('Server', () => {
-  test('should listen on port 3000', async () => {
+  it('should listen on port 3000', async () => {
     const listenMock = ViteExpress.listen as jest.Mock;
     const req = {} as Request;
     const res = {} as Response;

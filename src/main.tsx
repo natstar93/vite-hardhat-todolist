@@ -1,15 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import App from './components/App/App.tsx';
 import './index.css';
-
-const queryClient = new QueryClient();
+import ConnectionProvider from './contexts/ConnectionContextProvider.tsx';
+import ContractContextProvider from './contexts/ContractContextProvider.tsx';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <App />
-    </QueryClientProvider>
+    <ConnectionProvider>
+      <ContractContextProvider>
+        <App />
+      </ContractContextProvider>
+    </ConnectionProvider>
   </React.StrictMode>
 );

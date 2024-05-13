@@ -1,17 +1,14 @@
-import { Contract, JsonRpcSigner } from 'ethers';
-import { Dispatch, createContext } from 'react';
+import { Dispatch, createContext, useContext } from 'react';
 
 export type ConnectionStatusType = {
   walletAddress: string;
   isConnected: boolean;
-  signer?: JsonRpcSigner;
   error: string | null;
-  contract?: Contract;
 };
 
 export type ConnectionContextType = {
   connectionStatus: ConnectionStatusType;
-  setConnectionStatus?: Dispatch<React.SetStateAction<ConnectionStatusType>>;
+  setConnectionStatus: Dispatch<React.SetStateAction<ConnectionStatusType>>;
 };
 
 export const connectionStatusDefaultValues = {
@@ -22,10 +19,21 @@ export const connectionStatusDefaultValues = {
 
 export const connectionContextDefaultValues = {
   connectionStatus: connectionStatusDefaultValues,
+  setConnectionStatus: () => connectionStatusDefaultValues,
 };
 
 const ConnectionContext = createContext<ConnectionContextType>(
   connectionContextDefaultValues
 );
+
+export const useConnectionContext = () => {
+  const context = useContext(ConnectionContext);
+  if (context === undefined) {
+    throw new Error(
+      'useConnectionContext must be used within a ConnectionProvider'
+    );
+  }
+  return context;
+};
 
 export default ConnectionContext;

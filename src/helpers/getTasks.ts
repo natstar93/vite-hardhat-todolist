@@ -1,7 +1,7 @@
 import { Contract } from 'ethers';
 
 import { Task } from '../components/TodoList/TodoList.tsx';
-import { handleErrors } from './handleErrors.ts';
+import { formatErrorMessage } from './formatErrorMessage.ts';
 
 const getTasks = async (contract: Contract) => {
   try {
@@ -14,7 +14,7 @@ const getTasks = async (contract: Contract) => {
 
     return { taskList, error: '' };
   } catch (err) {
-    const error = handleErrors(err);
+    const error = formatErrorMessage(err);
     return { taskList: [], error };
   }
 };

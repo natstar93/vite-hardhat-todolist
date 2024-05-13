@@ -7,7 +7,7 @@ jest.mock('./handlers/getTodoListData.ts', () => ({
 }));
 
 describe('App endpoints', () => {
-  test('should serve healthcheck page', async () => {
+  it('should serve healthcheck page', async () => {
     const res = await request(app).get('/healthcheck');
     expect(res.status).toBe(200);
     expect(res.headers['content-type']).toContain('text/html');

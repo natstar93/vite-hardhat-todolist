@@ -5,13 +5,17 @@ import ConnectionContext from '../../contexts/ConnectionContext.ts';
 import TodoList, { Task } from '../TodoList/TodoList.tsx';
 import AddTodoForm from '../AddTodoForm/AddTodoForm.tsx';
 import getTasks from '../../helpers/getTasks.ts';
+import { useContractContext } from '../../contexts/ContractContext.ts';
 
 const TodoListContainer = () => {
   const [lastTransationHash, setLastTransationHash] = useState<string>('');
-  const { connectionStatus } = useContext(ConnectionContext);
-  const { isConnected, contract, walletAddress } = connectionStatus;
   const [taskList, setTaskList] = useState<Task[]>([]);
   const [taskListError, setTaskListError] = useState<string>('');
+
+  const {
+    connectionStatus: { isConnected, walletAddress },
+  } = useContext(ConnectionContext);
+  const { contractStatus } = useContractContext();
 
   useEffect(() => {
     async function setTasks(contract: Contract) {
@@ -19,8 +23,9 @@ const TodoListContainer = () => {
       setTaskListError(error);
       setTaskList(taskList);
     }
+    const { contract } = contractStatus;
     contract && setTasks(contract);
-  }, [contract, walletAddress, lastTransationHash]);
+  }, [contractStatus, walletAddress, lastTransationHash]);
 
   return (
     <section id='todoList'>

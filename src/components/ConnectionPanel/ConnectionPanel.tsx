@@ -1,19 +1,28 @@
 import React, { useContext } from 'react';
 
 import ConnectionContext from '../../contexts/ConnectionContext.ts';
-import getEthConnectionDetails from '../../helpers/getEthConnectionDetails.ts';
+import connectWallet from '../../helpers/connectWallet.ts';
+import { useContractContext } from '../../contexts/ContractContext.ts';
+import getContract from '../../helpers/getContract.ts';
 
 const ConnectionPanel = () => {
-  const { setConnectionStatus, connectionStatus } = useContext(ConnectionContext);
-  const { walletAddress, isConnected, error } = connectionStatus;
-  
+  const {
+    setConnectionStatus,
+    connectionStatus: { walletAddress, isConnected, error },
+  } = useContext(ConnectionContext);
+
+  const { setContractStatus } = useContractContext();
+
   const handleClick = () => {
-    async function getConnectionStatus() {
-      const connectionStatus = await getEthConnectionDetails();
-      setConnectionStatus && setConnectionStatus(connectionStatus);
+    async function connect() {
+      const connectWalletResponse = await connectWallet();
+      setConnectionStatus(connectWalletResponse);
+
+      const contractResponse = await getContract();
+      setContractStatus(contractResponse);
     }
 
-    getConnectionStatus();
+    connect();
   };
 
   return (
