@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { loadFixture } from '@nomicfoundation/hardhat-toolbox/network-helpers.js';
 import { ethers, ignition } from 'hardhat';
-import TodoListModule from '../ignition/modules/TodoList.js';
+import TodoListModule from '../ignition/modules/TodoList.ts';
 
 describe('TodoList contract', function () {
   async function deployTodoListFixture() {

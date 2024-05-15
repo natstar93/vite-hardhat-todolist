@@ -7,8 +7,8 @@ import {
   ERR_WALLET_NOT_FOUND,
   ERR_NO_CONTRACT,
 } from '../constants.ts';
-import { abi } from '../../artifacts/contracts/TodoList.sol/TodoList.json';
-import addresses from '../../ignition/deployments/chain-11155111/deployed_addresses.json';
+import { abi } from '../../blockchain/artifacts/contracts/TodoList.sol/TodoList.json';
+import addresses from '../../blockchain/ignition/deployments/chain-11155111/deployed_addresses.json';
 
 const errorResponse = (errorMessage: string) => ({
   isConnected: false,

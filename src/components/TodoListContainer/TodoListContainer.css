@@ -1,0 +1,7 @@
+section#todoListContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  border: 2px solid rgb(118 93 120);
+}

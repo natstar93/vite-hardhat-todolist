@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Contract } from 'ethers';
 
+import './TodoListContainer.css';
 import ConnectionContext from '../../contexts/ConnectionContext.ts';
 import TodoList, { Task } from '../TodoList/TodoList.tsx';
 import AddTodoForm from '../AddTodoForm/AddTodoForm.tsx';
@@ -26,7 +27,7 @@ const TodoListContainer = () => {
   }, [contract, walletAddress, lastTransationHash]);
 
   return (
-    <section id='todoList'>
+    <section id='todoListContainer'>
       <p id='errorBanner'>{taskListError}</p>
       <AddTodoForm setLastTransationHash={setLastTransationHash} />
       {isConnected && contract && <TodoList todos={taskList} />}

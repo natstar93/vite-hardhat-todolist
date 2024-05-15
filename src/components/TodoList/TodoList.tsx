@@ -1,4 +1,5 @@
 import React, { memo } from 'react';
+import './TodoList.css';
 
 export type Task = {
   id: number;
@@ -7,12 +8,12 @@ export type Task = {
 };
 
 const TodoList = memo(({ todos }: { todos: Task[] }) => (
-  <ul className='todoListContainer'>
+  <ul id='todoList'>
     {todos.length
       ? todos.map(({ id, content, completed }) => (
           <li
             key={`task-${id}`}
-          >{`${id} - ${content} - completed: ${completed}`}</li>
+          ><input type="checkbox" id={id.toString()} checked={completed}/> {content}</li>
         ))
       : 'Nothing to do today'}
   </ul>

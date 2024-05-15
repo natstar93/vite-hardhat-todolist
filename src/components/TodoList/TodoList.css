@@ -1,0 +1,17 @@
+ul#todoList {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0.5rem 2rem 0.5rem 5rem;
+  max-width: 80rem;
+  width: 60%;
+}
+
+li {
+  list-style-type: none;
+  padding: 0.5rem;
+}
+
+input { 
+  margin: 0 1rem;
+}

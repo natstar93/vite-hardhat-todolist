@@ -47,6 +47,11 @@ button {
   cursor: pointer;
   transition: border-color 0.25s;
 }
+
+button[aria-disabled=true] {
+  cursor: not-allowed;
+}  
+
 button:hover {
   border-color: #646cff;
 }

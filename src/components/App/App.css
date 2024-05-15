@@ -13,10 +13,6 @@ ul {
   background-color: rgba(0, 0, 0, 0.3);
 }
 
-section#todoList {
-  border: 2px solid rgb(118 93 120);
-}
-
 .logo {
   height: 6em;
   padding: 1.5em;
@@ -52,3 +48,4 @@ section#todoList {
 .read-the-docs {
   color: #888;
 }
+

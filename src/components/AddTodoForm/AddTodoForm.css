@@ -4,6 +4,10 @@ form {
   flex-direction: column;
 }
 
-.btnSubmitTodo[aria-disabled=true] {
-  cursor: not-allowed;
+.tooltipBox {
+  margin: 1em;
+}
+
+.tooltipContent {
+  margin: 1em;
 }
