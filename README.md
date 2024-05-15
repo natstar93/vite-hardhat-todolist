@@ -1,30 +1,24 @@
-# React + TypeScript + Vite
+# Blockchain Todo List
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+[WIP]
 
-Currently, two official plugins are available:
+### Completed
+- [X] Solidity contracts (Check out the [Sepolia Contract transactions](https://sepolia.etherscan.io/address/0x347EcE27D451BBe1E99Bc0916573900411AFc97C) on etherscan)
+- [X] Deployment to Ethereum Testnet
+- [X] Connection context, connect to ethereum and interact with contract
+- [X] Basic UI (ugly)
+- [X] FE Unit testing (Jest)
+- [X] Contract testing (Hardhat)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-## Expanding the ESLint configuration
+### Todo
+- [ ] Styling (Tailwind?)
+- [ ] Update task completion status (contract change)
+- [ ] Delete task functionality (contract change)
+- [ ] Move contract address selection to express endpoint
+- [ ] Better a11y (buttons, aria described by etc)
+- [ ] More explicit error messages
+- [ ] Support multiple languages?
+- [ ] Better README ;)
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+<img width="956" alt="Screenshot 2024-05-16 at 00 21 38" src="https://github.com/natstar93/vite-hardhat-todolist/assets/10135250/a5bfaa28-7950-4081-b993-f0c87823e090">
