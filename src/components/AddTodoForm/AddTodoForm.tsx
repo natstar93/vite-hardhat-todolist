@@ -4,7 +4,6 @@ import { ContractTransactionResponse } from 'ethers';
 import './AddTodoForm.css';
 import ConnectionContext from '../../contexts/ConnectionContext.ts';
 import { formatErrorMessage } from '../../helpers/formatErrorMessage.ts';
-import { useContractContext } from '../../contexts/ContractContext.ts';
 
 const AddTodoForm = ({
   setLastTransationHash,
@@ -15,10 +14,7 @@ const AddTodoForm = ({
   const [errorMessage, setErrorMessage] = useState<string>('');
 
   const { connectionStatus } = useContext(ConnectionContext);
-  const { contractStatus } = useContractContext();
-
-  const { contract } = contractStatus;
-  const { isConnected } = connectionStatus;
+  const { isConnected, contract } = connectionStatus;
 
   useEffect(() => {
     setErrorMessage('');

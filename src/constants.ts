@@ -1,6 +1,6 @@
 // error messages
 
-export const ERR_NO_SIGNER = 'Could not get signer';
+export const ERR_NO_CONTRACT = 'The contract could not be found';
 export const ERR_NO_WINDOW_OBJECT =
   'Your account could not be loaded. Please check the MetaMask browser extension is installed correctly.';
 export const ERR_WALLET_NOT_FOUND =

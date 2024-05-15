@@ -1,8 +1,10 @@
-import { Dispatch, createContext, useContext } from 'react';
+import { Dispatch, createContext } from 'react';
+import { Contract } from 'ethers';
 
 export type ConnectionStatusType = {
   walletAddress: string;
   isConnected: boolean;
+  contract: Contract | null,
   error: string | null;
 };
 
@@ -14,6 +16,7 @@ export type ConnectionContextType = {
 export const connectionStatusDefaultValues = {
   walletAddress: '',
   isConnected: false,
+  contract: null,
   error: null,
 };
 
@@ -26,14 +29,15 @@ const ConnectionContext = createContext<ConnectionContextType>(
   connectionContextDefaultValues
 );
 
-export const useConnectionContext = () => {
-  const context = useContext(ConnectionContext);
-  if (context === undefined) {
-    throw new Error(
-      'useConnectionContext must be used within a ConnectionProvider'
-    );
-  }
-  return context;
-};
+// export const useConnectionContext = () => {
+//   const context = useContext(ConnectionContext);
+//   console.log({ context })
+//   if (context === undefined) {
+//     throw new Error(
+//       'useConnectionContext must be used within a ConnectionProvider'
+//     );
+//   }
+//   return context;
+// };
 
 export default ConnectionContext;

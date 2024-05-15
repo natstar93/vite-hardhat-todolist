@@ -1,8 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 
-import {
+import ConnectionContext, {
   connectionStatusDefaultValues,
-  useConnectionContext,
 } from '../../contexts/ConnectionContext.ts';
 import ConnectionPanel from '../ConnectionPanel/ConnectionPanel.tsx';
 import './App.css';
@@ -10,16 +9,21 @@ import TodoListContainer from '../TodoListContainer/TodoListContainer.tsx';
 import Header from '../Header/Header.tsx';
 
 const App = () => {
-  const { setConnectionStatus } = useConnectionContext();
+  const { setConnectionStatus } = useContext(ConnectionContext);
 
   useEffect(() => {
     async function handleAccountsChanged(accounts: string[]) {
+      console.log({ accounts })
       !accounts.length && setConnectionStatus(connectionStatusDefaultValues);
     }
 
     window?.ethereum?.on('accountsChanged', handleAccountsChanged);
+
     return () =>
-      window?.ethereum.removeListener('accountsChanged', handleAccountsChanged);
+      window?.ethereum?.removeListener(
+        'accountsChanged',
+        handleAccountsChanged
+      );
   }, [setConnectionStatus]);
 
   return (
