@@ -13,7 +13,7 @@ const TodoList = memo(({ todos }: { todos: Task[] }) => (
       ? todos.map(({ id, content, completed }) => (
           <li
             key={`task-${id}`}
-          ><input type="checkbox" id={id.toString()} checked={completed}/> {content}</li>
+          ><input type="checkbox" id={id.toString()} checked={completed} onClick={() => console.info('Not enabled yet, soz')}/> {content}</li>
         ))
       : 'Nothing to do today'}
   </ul>

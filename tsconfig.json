@@ -23,7 +23,7 @@
   "include": [
     "src/**/*",
     "server/**/*",
-    "<rootDir>/jest-setup.ts"
+    "jest-setup.ts"
   ],
   "types": ["node", "jest", "@testing-library/jest-dom"]
 }

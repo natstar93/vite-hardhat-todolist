@@ -7,5 +7,6 @@ export default {
       '<rootDir>/__mocks__/fileMock.js',
     '\\.(css|less)$': 'identity-obj-proxy',
   },
-  setupFilesAfterEnv: ['<rootDir>/jest-setup.ts']
+  setupFilesAfterEnv: ['<rootDir>./jest-setup.ts'],
+  coverageReporters: ["text", "text-summary"]
 };

@@ -29,15 +29,4 @@ const ConnectionContext = createContext<ConnectionContextType>(
   connectionContextDefaultValues
 );
 
-// export const useConnectionContext = () => {
-//   const context = useContext(ConnectionContext);
-//   console.log({ context })
-//   if (context === undefined) {
-//     throw new Error(
-//       'useConnectionContext must be used within a ConnectionProvider'
-//     );
-//   }
-//   return context;
-// };
-
 export default ConnectionContext;

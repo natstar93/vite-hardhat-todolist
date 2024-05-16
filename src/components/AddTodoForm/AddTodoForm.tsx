@@ -40,6 +40,7 @@ const AddTodoForm = ({
     <aside>
       <form onSubmit={onSubmit}>
         <div>
+          <label htmlFor='newTodoField'>New Todo:</label>
           <input
             id='newTodoField'
             type='text'
@@ -47,16 +48,15 @@ const AddTodoForm = ({
             value={newTodoText}
             onChange={(e) => setNewTodoText(e.target.value)}
           />
-
-          <button
-            type='submit'
-            aria-disabled={!isConnected}
-            aria-describedby='disabledReason'
-            className='btnSubmitTodo'
-          >
-            Add todo
-          </button>
         </div>
+        <button
+          type='submit'
+          aria-disabled={!isConnected}
+          aria-describedby='disabledReason'
+          className='btnSubmitTodo'
+        >
+          Submit Todo
+        </button>
         {!isConnected && (
           <div role='tooltip' className='tooltipBox' id='disabledReason'>
             <span className='tooltipContent'>
@@ -64,7 +64,12 @@ const AddTodoForm = ({
             </span>
           </div>
         )}
-        <p> {isConnected && errorMessage && <span data-testid='contract-error-msg'>{errorMessage}</span>}</p>
+        <p>
+          {' '}
+          {isConnected && errorMessage && (
+            <span data-testid='contract-error-msg'>{errorMessage}</span>
+          )}
+        </p>
       </form>
     </aside>
   );

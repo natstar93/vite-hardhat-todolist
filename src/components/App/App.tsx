@@ -13,7 +13,6 @@ const App = () => {
 
   useEffect(() => {
     async function handleAccountsChanged(accounts: string[]) {
-      console.log({ accounts })
       !accounts.length && setConnectionStatus(connectionStatusDefaultValues);
     }
 
