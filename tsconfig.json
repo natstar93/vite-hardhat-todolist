@@ -19,5 +19,11 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
-  }
+  },
+  "include": [
+    "src/**/*",
+    "server/**/*",
+    "<rootDir>/jest-setup.ts"
+  ],
+  "types": ["node", "jest", "@testing-library/jest-dom"]
 }

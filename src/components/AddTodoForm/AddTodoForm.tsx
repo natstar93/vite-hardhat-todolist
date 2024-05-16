@@ -64,7 +64,7 @@ const AddTodoForm = ({
             </span>
           </div>
         )}
-        <div> {isConnected && <p>{errorMessage}</p>}</div>
+        <p> {isConnected && errorMessage && <span data-testid='contract-error-msg'>{errorMessage}</span>}</p>
       </form>
     </aside>
   );

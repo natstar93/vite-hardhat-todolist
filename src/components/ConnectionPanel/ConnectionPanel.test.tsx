@@ -1,7 +1,6 @@
 import React from 'react';
 import { Contract } from 'ethers';
 import { fireEvent, render, waitFor } from '@testing-library/react';
-import '@testing-library/jest-dom';
 
 import ConnectionPanel from './ConnectionPanel.tsx';
 import ConnectionContextProvider from '../../contexts/ConnectionContextProvider.tsx';
